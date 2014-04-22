@@ -109,13 +109,13 @@ class headJS_loader {
 					preg_match_all('/<script([^>]*?)>(.*)<\/script>/i', $buffer, $script_tags_match);
 				if (strpos(strtolower($script_tag), 'text/javascript') !== false) {
 					/* Pull out any scripts that are not enqueued properly */
-					preg_match('/<script([^>]*?)src=[\'"]([^\'"]+)([^>]*?)>/', $script_tag, $src_match);
-					if (!empty ($src_match[2])) {
-						if (!in_array( $src_match[2], $this->ignoreScripts)) {
+					preg_match('/<script([^>]*?)src=[\'"](?P<src>[^\'"]+)([^>]*?)>/', $script_tag, $src_match);
+					if (!empty ($src_match['src'])) {
+						if (!in_array( $src_match['src'], $this->ignoreScripts)) {
 							/* Remove the script tags */
 							$buffer = str_replace($script_tag, '', $buffer);
 							/* Save the script location */
-							$script_array[] = $src_match[2];
+							$script_array[] = $src_match['src'];
 						}
 					} elseif ($this->adminOptions['wrap_inline_js'] == 'true') {
 						/* Add head.ready function to inline javascript */
